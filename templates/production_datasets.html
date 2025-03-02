@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<!-- Page Header -->
+<div class="container text-center mt-4">
+    <h1>LSST-DESC Datasets</h1>
+    <p class="text-muted">
+        This page provides access to prebuilt queries for LSST-DESC production datasets.
+        Browse categories below and click on the "Run Query" button to execute any of the predefined queries.
+    </p>
+</div>
+
+{% if error %}
+<!-- Error Message -->
+<div class="container mt-3">
+    <div class="alert alert-danger fade-in">
+        <h4 class="alert-heading">Error</h4>
+        <p>{{ error }}</p>
+        <hr>
+        <p class="mb-0">Please try a different query or contact the administrator for assistance.</p>
+    </div>
+</div>
+{% endif %}
+
+<!-- Categories and Prebuilt Queries -->
+<div class="container mt-4">
+    {% for category_loop in categories %}
+    <div class="category-container p-4 mt-4 fade-in">
+        <h2 class="category-title">{{ category_loop.name }}</h2>
+        <p class="category-description mb-4">{{ category_loop.description }}</p>
+        
+        <div class="row">
+            {% for query_item in category_loop.queries %}
+            <div class="col-md-6 mb-4">
+                <div class="card border-info h-100">
+                    <div class="card-header">
+                        <h4>{{ query_item.title }}</h4>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text">{{ query_item.description }}</p>
+                        
+                        <div class="mt-3">
+                            <h5>Query Details:</h5>
+                            <div class="accordion" id="query-{{ loop.index }}-{{ category_loop.id }}">
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header">
+                                        <button class="accordion-button collapsed" type="button" 
+                                                data-bs-toggle="collapse" 
+                                                data-bs-target="#details-{{ loop.index }}-{{ category_loop.id }}" 
+                                                aria-expanded="false">
+                                            View Query Details
+                                        </button>
+                                    </h2>
+                                    <div id="details-{{ loop.index }}-{{ category_loop.id }}" 
+                                         class="accordion-collapse collapse" 
+                                         data-bs-parent="#query-{{ loop.index }}-{{ category_loop.id }}">
+                                        <div class="accordion-body">
+                                            <div class="mb-3">
+                                                <strong>Filters:</strong>
+                                                <ul class="list-group list-group-flush">
+                                                    {% for filter in query_item.filters %}
+                                                    <li class="list-group-item px-0 py-1 border-0">
+                                                        <code>{{ filter }}</code>
+                                                    </li>
+                                                    {% endfor %}
+                                                </ul>
+                                            </div>
+                                            <div>
+                                                <strong>Columns:</strong>
+                                                <ul class="list-group list-group-flush">
+                                                    {% for column in query_item.columns %}
+                                                    <li class="list-group-item px-0 py-1 border-0">
+                                                        <code>{{ column }}</code>
+                                                    </li>
+                                                    {% endfor %}
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-transparent border-info text-center">
+                        <form action="{{ url_for('run_prebuilt_query') }}" method="post">
+                            <input type="hidden" name="category_name" value="{{ category_loop.name }}">
+                            <input type="hidden" name="query_title" value="{{ query_item.title }}">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-play"></i> Run Query
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+{% endblock %}

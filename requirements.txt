@@ -1,0 +1,4 @@
+flask
+gunicorn
+lsstdesc-dataregistry
+

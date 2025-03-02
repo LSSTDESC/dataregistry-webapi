@@ -1,0 +1,296 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<!-- Page Header -->
+<div class="container text-center mt-4">
+    <h1>{{ query_title|default('Query Results') }}</h1>
+    <p class="text-muted">
+        {% if query_description %}
+            {{ query_description }}
+        {% else %}
+            Below are the results from your query. Click column headers to sort. You can also download the results as a CSV file.
+        {% endif %}
+    </p>
+</div>
+
+{% if error %}
+<!-- Error Message -->
+<div class="container mt-3">
+    <div class="alert alert-danger fade-in">
+        <h4 class="alert-heading">Error</h4>
+        <p>{{ error }}</p>
+        <hr>
+        <p class="mb-0">Please try modifying your query or contact the administrator for assistance.</p>
+    </div>
+    <div class="d-flex gap-2 mt-3">
+        <a href="{{ url_for('query') }}" class="btn btn-primary">
+            <i class="fas fa-edit"></i> Build a New Query
+        </a>
+        <a href="{{ url_for('production_datasets') }}" class="btn btn-secondary">
+            <i class="fas fa-list"></i> View Prebuilt Queries
+        </a>
+    </div>
+</div>
+{% else %}
+
+<!-- Query Summary Section -->
+<div class="container mt-3">
+    <div class="card border-info mb-3 fade-in">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <span>Query Summary</span>
+            <button class="btn btn-sm btn-outline-info" id="toggle-summary" title="Toggle summary">
+                <i class="fas fa-chevron-up"></i>
+            </button>
+        </div>
+        <div class="card-body" id="summary-body">
+            <p><strong>Schema:</strong> {{ schema }}</p>
+            <p><strong>Selected Columns:</strong> {{ return_columns | join(', ') if return_columns else 'All columns' }}</p>
+            <p><strong>Filters Applied:</strong>
+                {% if filters %}
+                    <ul class="list-unstyled">
+                        {% for filter in filters %}
+                            <li>- {{ filter }}</li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    None
+                {% endif %}
+            </p>
+            <div class="text-end">
+                <a href="{{ url_for('query') }}" class="btn btn-sm btn-primary">
+                    <i class="fas fa-edit"></i> Modify Query
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Download & Results Table -->
+<div class="container">
+    <!-- Action Buttons -->
+    <div class="d-flex justify-content-between mb-3 fade-in">
+        <div>
+            <span class="badge bg-primary">{{ rows_count if rows_count else '0' }} result{% if rows_count != 1 %}s{% endif %}</span>
+        </div>
+        <div class="btn-group">
+            <a id="download-csv-btn" class="btn btn-outline-primary" download="query_results.csv">
+                <i class="fas fa-file-csv"></i> CSV
+            </a>
+            <a id="download-json-btn" class="btn btn-outline-primary" download="query_results.json">
+                <i class="fas fa-file-code"></i> JSON
+            </a>
+        </div>
+    </div>
+
+    <!-- Results Table -->
+    <div class="table-container fade-in">
+        {% if table %}
+            <div class="table-responsive">
+                {{ table | safe }}
+            </div>
+        {% else %}
+            <div class="alert alert-info text-center">
+                <i class="fas fa-info-circle fa-lg me-2"></i>
+                No results found for your query criteria.
+                <a href="{{ url_for('query') }}" class="alert-link">Modify your query</a>
+            </div>
+        {% endif %}
+    </div>
+    
+    <!-- Pagination if implemented -->
+    <div class="d-flex justify-content-between align-items-center mt-3 fade-in">
+        <div>
+            <label for="resultsPerPage" class="form-label me-2">Results per page:</label>
+            <select id="resultsPerPage" class="form-select form-select-sm d-inline-block w-auto">
+                <option value="10">10</option>
+                <option value="25" selected>25</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+            </select>
+        </div>
+        <nav aria-label="Results pagination">
+            <ul class="pagination pagination-sm">
+                <li class="page-item disabled">
+                    <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+                </li>
+                <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                <li class="page-item disabled">
+                    <a class="page-link" href="#">Next</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
+
+<script>
+    // Toggle query summary
+    document.getElementById("toggle-summary").addEventListener("click", function() {
+        const summaryBody = document.getElementById("summary-body");
+        const icon = this.querySelector("i");
+        
+        if (summaryBody.style.display === "none") {
+            summaryBody.style.display = "block";
+            icon.classList.replace("fa-chevron-down", "fa-chevron-up");
+        } else {
+            summaryBody.style.display = "none";
+            icon.classList.replace("fa-chevron-up", "fa-chevron-down");
+        }
+    });
+
+    // Convert table to CSV and allow download
+    document.getElementById("download-csv-btn").addEventListener("click", function(e) {
+        const table = document.querySelector("table");
+        if (!table) {
+            e.preventDefault();
+            alert("No data available to download");
+            return;
+        }
+        
+        let csvContent = "";
+        
+        // Extract table headers
+        const headers = Array.from(table.querySelectorAll("th"))
+            .map(header => `"${header.innerText.replace(/"/g, '""')}"`);
+        csvContent += headers.join(",") + "\n";
+        
+        // Extract table rows
+        const rows = table.querySelectorAll("tbody tr");
+        rows.forEach(row => {
+            const cells = row.querySelectorAll("td");
+            const rowData = Array.from(cells)
+                .map(cell => `"${cell.innerText.replace(/"/g, '""')}"`);
+            csvContent += rowData.join(",") + "\n";
+        });
+
+        // Create a downloadable CSV file
+        const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+        this.href = URL.createObjectURL(blob);
+    });
+    
+    // Convert table to JSON and allow download
+    document.getElementById("download-json-btn").addEventListener("click", function(e) {
+        const table = document.querySelector("table");
+        if (!table) {
+            e.preventDefault();
+            alert("No data available to download");
+            return;
+        }
+        
+        const headers = Array.from(table.querySelectorAll("th")).map(header => header.innerText);
+        const rows = table.querySelectorAll("tbody tr");
+        
+        const jsonData = [];
+        rows.forEach(row => {
+            const cells = row.querySelectorAll("td");
+            const rowObj = {};
+            
+            headers.forEach((header, index) => {
+                if (cells[index]) {
+                    rowObj[header] = cells[index].innerText;
+                }
+            });
+            
+            jsonData.push(rowObj);
+        });
+        
+        const jsonBlob = new Blob([JSON.stringify(jsonData, null, 2)], 
+            { type: "application/json;charset=utf-8;" });
+        this.href = URL.createObjectURL(jsonBlob);
+    });
+
+    // Add sorting functionality to table headers
+    document.querySelectorAll("th").forEach(header => {
+        // Add sorting icons and styling
+        header.classList.add("sortable");
+        header.style.cursor = "pointer";
+        header.style.position = "relative";
+        header.innerHTML += '<span class="sort-icon ms-1 opacity-25"><i class="fas fa-sort"></i></span>';
+        
+        // Track current sort state for this column
+        let sortDirection = null; // null = unsorted, true = ascending, false = descending
+        
+        header.addEventListener("click", () => {
+            const table = header.closest("table");
+            const columnIndex = Array.from(header.parentNode.children).indexOf(header);
+            
+            // Reset all other headers
+            table.querySelectorAll("th").forEach(th => {
+                if (th !== header) {
+                    th.classList.remove("asc", "desc");
+                    th.querySelector(".sort-icon").innerHTML = '<i class="fas fa-sort"></i>';
+                    th.querySelector(".sort-icon").classList.add("opacity-25");
+                }
+            });
+            
+            // Toggle sort direction
+            if (sortDirection === null || sortDirection === false) {
+                sortDirection = true; // ascending
+                header.classList.remove("desc");
+                header.classList.add("asc");
+                header.querySelector(".sort-icon").innerHTML = '<i class="fas fa-sort-up"></i>';
+            } else {
+                sortDirection = false; // descending
+                header.classList.remove("asc");
+                header.classList.add("desc");
+                header.querySelector(".sort-icon").innerHTML = '<i class="fas fa-sort-down"></i>';
+            }
+            
+            header.querySelector(".sort-icon").classList.remove("opacity-25");
+            
+            // Sort the table based on new direction
+            sortTable(table, columnIndex, sortDirection);
+        });
+    });
+
+    function sortTable(table, columnIndex, isAscending) {
+        const rows = Array.from(table.querySelectorAll("tbody tr"));
+        
+        // Determine if column contains numbers
+        const isNumeric = rows.every(row => {
+            const cell = row.cells[columnIndex];
+            if (!cell) return false;
+            const text = cell.textContent.trim();
+            return !isNaN(text) && text !== "";
+        });
+        
+        rows.sort((rowA, rowB) => {
+            if (!rowA.cells[columnIndex] || !rowB.cells[columnIndex]) return 0;
+            
+            const cellA = rowA.cells[columnIndex].textContent.trim();
+            const cellB = rowB.cells[columnIndex].textContent.trim();
+            
+            if (isNumeric) {
+                return isAscending 
+                    ? parseFloat(cellA) - parseFloat(cellB)
+                    : parseFloat(cellB) - parseFloat(cellA);
+            } else {
+                return isAscending 
+                    ? cellA.localeCompare(cellB, undefined, { numeric: true })
+                    : cellB.localeCompare(cellA, undefined, { numeric: true });
+            }
+        });
+
+        // Reorder the table
+        const tbody = table.querySelector("tbody");
+        rows.forEach(row => tbody.appendChild(row));
+    }
+
+    // Results per page functionality (placeholder - would need backend support)
+    document.getElementById("resultsPerPage").addEventListener("change", function() {
+        // This would typically trigger a new request to the server
+        console.log("Results per page changed to:", this.value);
+    });
+    
+    // Ensure we show query titles prominently if they exist
+    document.addEventListener("DOMContentLoaded", function() {
+        const titleElement = document.querySelector("h1");
+        if (titleElement && titleElement.textContent !== "Query Results") {
+            titleElement.classList.add("text-primary");
+        }
+    });
+</script>
+
+{% endif %}
+
+{% endblock %}

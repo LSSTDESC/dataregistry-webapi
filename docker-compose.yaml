@@ -1,0 +1,25 @@
+version: "3.8"  # Add version for compatibility
+
+services:
+  web:
+    build: .  # Build the Flask app from the current directory
+    ports:
+      - "5000:5000"  # Expose Flask on port 5000
+    depends_on:
+      database:  # Ensure database starts first
+        condition: service_healthy
+    volumes:
+      - .:/app  # Sync code for live reload
+
+  database:
+    build: /home/mcalpine/Documents/dataregistry/Docker  # Use the correct path for PostgreSQL Dockerfile
+    environment:
+      - POSTGRES_PASSWORD=password  # Set database password
+    ports:
+      - "5432:5432"  # Expose PostgreSQL on port 5432
+
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+      interval: 5s
+      retries: 5
+      timeout: 3s
