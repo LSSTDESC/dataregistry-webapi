@@ -1,0 +1,367 @@
+/* General Page Styles */
+body {
+    font-family: 'Poppins', sans-serif !important;
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+    background-color: #f8f9fa;
+    overflow-x: hidden;
+    color: #333;
+    padding-top: 56px; /* For fixed navbar */
+}
+
+/* Navbar Styles */
+.navbar {
+    position: fixed !important;  /* Keeps it fixed at the top */
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: #1C2331;
+    padding: 12px 20px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1000;  /* Ensures it's above other elements */
+}
+
+.navbar-brand {
+    color: white;
+    font-size: 1.5rem;
+    text-decoration: none;
+}
+
+.navbar-logo {
+    height: 40px;
+    width: auto;
+}
+
+.navbar-nav .nav-link {
+    font-size: 1rem;
+    padding: 10px 15px;
+    color: #ffffff !important;
+    transition: color 0.3s, background 0.3s;
+    border-radius: 5px;
+    text-decoration: none;
+    background: transparent;
+}
+
+.navbar-nav .nav-link:hover {
+    color: #ffc107 !important;
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.nav-link.active {
+    border-bottom: 3px solid #00acc1;
+}
+
+/* Banner Styles */
+.banner-container {
+    position: relative;
+    width: 100%;
+    height: 250px;
+    background-color: #343a40;
+    overflow: hidden;
+    margin-top: 0;
+    padding: 0;
+}
+
+.banner-img {
+    width: 100%;
+    height: 100%; /* Squeezes the image in the Y direction */
+    object-fit: cover;
+    object-position: 0% 40%; /* Adjust the offset: 'center' or 'top', 'bottom', 'left', 'right' */
+}
+
+.banner-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(rgba(40, 53, 147, 0.7), rgba(40, 53, 147, 0.4));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
+
+/* Page Content Styling */
+.main-content {
+    max-width: 1200px;
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin: 20px auto 0;
+}
+
+/* Modify way tables look */
+.table {
+    border-collapse: separate;
+    border-spacing: 0 5px;
+}
+
+.table th {
+    text-transform: uppercase;
+    font-weight: bold;
+    background: #1C2331;
+    color: white;
+}
+
+.table tbody tr:hover {
+    background: #f8f9fa;
+}
+
+/* Modify way buttons look */
+.btn {
+    border-radius: 50px;
+    padding: 10px 20px;
+    font-size: 16px;
+    transition: all 0.3s ease-in-out;
+}
+
+.btn:hover {
+    background-color: #ffc107;
+    color: black;
+}
+
+/* Style for Large Navigation Buttons */
+.central-link {
+    display: block;
+    padding: 20px;
+    background: #f8f9fa;  /* Light background */
+    border-radius: 10px;
+    text-decoration: none;
+    transition: all 0.3s ease-in-out;
+    min-height: 200px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.central-link:hover {
+    background: #e9ecef;  /* Slightly darker on hover */
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.central-link i {
+    display: block;
+    margin-bottom: 10px;
+}
+
+.icon-circle {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Category Styling */
+.category-container {
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    margin-bottom: 2rem;
+    padding: 20px;
+}
+
+.category-title {
+    color: #2c3e50;
+    border-bottom: 2px solid #3498db;
+    padding-bottom: 0.5rem;
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.category-description {
+    font-size: 1.1rem;
+    color: #555;
+    max-width: 900px;
+    margin: 0 auto 1.5rem auto;
+}
+
+/* Card Styling */
+.card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    height: 100%;
+    border: 1px solid rgba(0, 0, 0, 0.125);
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.card-header h4 {
+    margin-bottom: 0;
+    color: #2980b9;
+}
+
+/* Ensure consistent card heights but scrollable content */
+.card-body {
+    overflow-y: auto;
+    max-height: 300px;
+}
+
+/* Query details styling */
+.accordion-button:not(.collapsed) {
+    background-color: rgba(52, 152, 219, 0.1);
+    color: #2980b9;
+}
+
+.accordion-button:focus {
+    box-shadow: 0 0 0 0.25rem rgba(52, 152, 219, 0.25);
+}
+
+/* Code styling within cards */
+.card code {
+    background-color: #f1f1f1;
+    color: #e74c3c;
+    padding: 2px 4px;
+    border-radius: 3px;
+    font-size: 0.9em;
+}
+
+/* Results page styling */
+.sortable {
+    cursor: pointer;
+    position: relative;
+}
+
+.sortable:after {
+    content: "⇅";
+    position: absolute;
+    right: 8px;
+    opacity: 0.4;
+}
+
+.sortable.asc:after {
+    content: "↑";
+    opacity: 1;
+}
+
+.sortable.desc:after {
+    content: "↓";
+    opacity: 1;
+}
+
+/* Query details list styling */
+.list-group-item {
+    padding: 0.5rem 0;
+    border: none;
+    background: transparent;
+}
+
+.list-group-item ul {
+    padding-left: 1.5rem;
+    margin-top: 0.5rem;
+    margin-bottom: 0;
+}
+
+.list-group-flush {
+    margin-left: 1rem;
+}
+
+.card-footer .btn {
+    min-width: 120px;
+}
+
+/* Error message styling */
+.alert-danger {
+    background-color: #fff5f5;
+    border-color: #f8d7da;
+}
+
+.alert-danger h4 {
+    color: #dc3545;
+}
+
+/* Enhanced button styling */
+.card-footer .btn-primary {
+    background-color: #3498db;
+    border-color: #3498db;
+    transition: all 0.3s ease;
+}
+
+.card-footer .btn-primary:hover {
+    background-color: #2980b9;
+    border-color: #2980b9;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Hover card animation */
+.hover-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hover-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Single fade-in animation */
+.fade-in {
+    animation: fadeInAnimation 0.8s ease-in forwards;
+    opacity: 1; /* Ensure elements remain visible after animation */
+}
+
+@keyframes fadeInAnimation {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Add this to your style.css file */
+
+/* Feature card styles */
+.feature-card {
+    height: 100%;  /* Use full height of column */
+    display: flex;
+    flex-direction: column;
+}
+
+.feature-card .card-body {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: visible;  /* Override any max-height or overflow settings */
+}
+
+.feature-card .card-text {
+    /* Limit text length while ensuring it fits */
+    margin-bottom: auto;
+}
+
+.feature-card .icon-circle {
+    width: 70px;
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    margin-bottom: 1rem;
+}
+
+.feature-card .btn {
+    margin-top: auto;  /* Push button to bottom */
+}
+
+/* Ensure cards have consistent height */
+.row .col-md-4 {
+    display: flex;
+}
+
+/* Remove any max-height from card-body that may be causing scrollbars */
+.card-body {
+    max-height: none;
+    overflow: visible;
+}

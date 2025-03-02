@@ -1,0 +1,55 @@
+# Example production_datasets.yaml structure
+categories:
+  - name: "Cosmological Simulations"
+    description: "Simulated datasets for cosmological analyses including galaxy catalogs and weak lensing maps."
+    queries:
+      - title: "DC2 Galaxy Catalog"
+        description: "Complete galaxy catalog from the LSST DESC Data Challenge 2 (DC2) simulation."
+        query:
+          filters:
+            - ["dataset.dataset_id", ">", 5]
+            - ["dataset.owner_type", "!=", "production"]
+          columns:
+            - "dataset.name"
+            - "dataset.dataset_id"
+            - "dataset.creation_date"
+            - "dataset.nfiles"
+      
+      - title: "Weak Lensing Shear Maps"
+        description: "Weak lensing shear maps derived from the DC2 simulation for various redshift bins."
+        query:
+          filters:
+            - ["dataset.name", "LIKE", "%shear_map%"]
+            - ["dataset.owner_type", "==", "production"]
+          columns:
+            - "dataset.name"
+            - "dataset.dataset_id" 
+            - "dataset.creation_date"
+            - "dataset.size_gb"
+
+  - name: "Observational Data Products"
+    description: "Processed observational data products from precursor surveys and early LSST observations."
+    queries:
+      - title: "HSC-like Photometry Catalog"
+        description: "Photometric catalog mimicking Hyper Suprime-Cam (HSC) observations."
+        query:
+          filters:
+            - ["dataset.name", "==", "hsc_like_photometry"]
+            - ["dataset.owner_type", "==", "production"]
+          columns:
+            - "dataset.name"
+            - "dataset.dataset_id"
+            - "dataset.nfiles"
+            - "dataset.creation_date"
+      
+      - title: "LSST Y1-like Mock Catalog"
+        description: "Mock catalog simulating expected data quality for LSST Year 1."
+        query:
+          filters:
+            - ["dataset.name", "==", "lsst_y1_mock"]
+            - ["dataset.owner_type", "==", "production"]
+          columns:
+            - "dataset.name"
+            - "dataset.dataset_id"
+            - "dataset.nfiles"
+            - "dataset.size_gb"
