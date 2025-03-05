@@ -1,3 +1,6 @@
+# This Dockerfile installs the webapi flask app requirements then runs the
+# flask app webserver
+
 # Use an official Python runtime as a parent image
 FROM python:3.9
 
@@ -13,12 +16,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy the rest of the application
 COPY . .
 
-# COPY datareg_config .
-#COPY datareg_config_testing datareg_config
-#ENV DATAREG_CONFIG=/app/datareg_config_testing
-
-COPY datareg_config datareg_config
-ENV DATAREG_CONFIG=/app/datareg_config
+# Location of the datareg config (this will be mounted in)
+ENV DATAREG_CONFIG=/app/datareg_config_files/datareg_config
 
 # Set environment variables for Flask
 ENV FLASK_APP=app.py
