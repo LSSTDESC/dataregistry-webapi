@@ -40,6 +40,9 @@
                             <i class="fas fa-server"></i> LSST-DESC Datasets
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.path == '/registry_stats' %}active{% endif %}" href="{{ url_for('registry_stats') }}">Registry Stats</a>
+                    </li>
                 </ul>
             </div>
         </div>

@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<!-- Page Header -->
+<div class="container text-center mt-4">
+    <h1>DataRegistry Statistics</h1>
+    <p class="text-muted">
+        System overview and statistics for the LSST-DESC DataRegistry
+    </p>
+</div>
+
+<!-- Version Information -->
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            <h2 class="h4 mb-0">Version Information</h2>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="mb-3">
+                        <h3 class="h5">DataRegistry Package Version</h3>
+                        <p class="lead">{{ version_info.dataregistry_version }}</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="mb-3">
+                        <h3 class="h5">Database Schema Version</h3>
+                        <p class="lead">{{ version_info.db_schema_version }}</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="mb-3">
+                        <h3 class="h5">Production Schema Version</h3>
+                        <p class="lead">{{ version_info.prod_schema_version }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Summary Statistics -->
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-header bg-success text-white">
+            <h2 class="h4 mb-0">Summary Statistics</h2>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100 border-success">
+                        <div class="card-header text-center bg-light">
+                            <h3 class="h5 mb-0">Total Datasets</h3>
+                        </div>
+                        <div class="card-body text-center">
+                            <div class="display-4 mb-2">{{ total_datasets.total }}</div>
+                            <div class="text-muted small">Production: {{ total_datasets.production }}</div>
+                            <div class="text-muted small">Working: {{ total_datasets.working }}</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100 border-success">
+                        <div class="card-header text-center bg-light">
+                            <h3 class="h5 mb-0">Total Files</h3>
+                        </div>
+                        <div class="card-body text-center">
+                            <div class="display-4 mb-2">{{ total_files.total }}</div>
+                            <div class="text-muted small">Production: {{ total_files.production }}</div>
+                            <div class="text-muted small">Working: {{ total_files.working }}</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100 border-success">
+                        <div class="card-header text-center bg-light">
+                            <h3 class="h5 mb-0">Total Disk Space</h3>
+                        </div>
+                        <div class="card-body text-center">
+                            <div class="display-4 mb-2">{{ disk_space.total }}</div>
+                            <div class="text-muted small">Production: {{ disk_space.production }}</div>
+                            <div class="text-muted small">Working: {{ disk_space.working }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
