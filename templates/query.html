@@ -132,6 +132,8 @@
                                     <option value=">" {% if previous_query.operators[i] == ">" %}selected{% endif %}>&gt;</option>
                                     <option value="<=" {% if previous_query.operators[i] == "<=" %}selected{% endif %}>&lt;=</option>
                                     <option value=">=" {% if previous_query.operators[i] == ">=" %}selected{% endif %}>&gt;=</option>
+                                    <option value="~=" {% if previous_query.operators[i] == "~=" %}selected{% endif %}>&gt;=</option>
+                                    <option value="~==" {% if previous_query.operators[i] == "~==" %}selected{% endif %}>&gt;=</option>
                                 </select>
                             </div>
                             <div class="col-md-3">
@@ -175,6 +177,8 @@
                                 <option value=">">&gt;</option>
                                 <option value="<=">&lt;=</option>
                                 <option value=">=">&gt;=</option>
+                                <option value="~=">&tilde;=</option>
+                                <option value="~==">&tilde;==</option>
                             </select>
                         </div>
                         <div class="col-md-3">
