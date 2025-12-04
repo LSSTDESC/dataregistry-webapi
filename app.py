@@ -32,11 +32,11 @@ def get_columns_dict():
     if "columns_dict" not in g:
         datareg = get_data_registry()
         cols = datareg.Query.get_all_columns()
-        tables = [x.split(".")[0] for x in cols]
+        tables = np.unique([x.split(".")[0] for x in cols])
 
-        columns_dict = {}
-        for t in np.unique(tables):
-            columns_dict[t] = [c.split(".")[1] for c in cols if c.split(".")[0] == t]
+        columns_dict = dict()
+        for t in tables:
+            columns_dict[t] = sorted([c.split(".")[1] for c in cols if c.split(".")[0] == t])
 
         g.columns_dict = columns_dict  # Cache it in Flask's `g` object
     return g.columns_dict
