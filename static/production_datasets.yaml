@@ -19,7 +19,7 @@ categories:
         description: "Weak lensing shear maps derived from the DC2 simulation for various redshift bins."
         query:
           filters:
-            - ["dataset.name", "LIKE", "%shear_map%"]
+            - ["dataset.name", "~=", "*shear_map*"]
             - ["dataset.owner_type", "==", "production"]
           columns:
             - "dataset.name"
