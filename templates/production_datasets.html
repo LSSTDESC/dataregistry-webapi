@@ -84,8 +84,9 @@
                     </div>
                     <div class="card-footer bg-transparent border-info text-center">
                         <form action="{{ url_for('run_prebuilt_query') }}" method="post">
-                            <input type="hidden" name="category_name" value="{{ category_loop.name }}">
+                          <input type="hidden" name="category_name" value="{{ category_loop.name }}">
                             <input type="hidden" name="query_title" value="{{ query_item.title }}">
+			    <input type="hidden" name="query_collection" value="production_datasets">
                             <button type="submit" class="btn btn-primary">
                                 <i class="fas fa-play"></i> Run Query
                             </button>

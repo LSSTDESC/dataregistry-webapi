@@ -43,9 +43,10 @@ def get_columns_dict():
 
 
 # Function to load categories and queries from YAML
-def load_categories_and_queries():
+def load_categories_and_queries(f="./static/production_datasets.yaml"):
     """Load category and query configurations from a YAML file."""
-    with open("./static/production_datasets.yaml", "r") as file:
+    # with open("./static/production_datasets.yaml", "r") as file:
+    with open(f, "r") as file:
         config = yaml.safe_load(file)
 
     # Process the query filters to create a human-readable representation
@@ -163,9 +164,11 @@ def run_prebuilt_query():
     """Run a prebuilt query selected from the production datasets page."""
     category_name = request.form.get("category_name")
     query_title = request.form.get("query_title")
+    query_collection = request.form.get("query_collection")
 
     # Load categories and queries
-    categories = load_categories_and_queries()
+    to_load = "./static/" + query_collection + ".yaml"
+    categories = load_categories_and_queries(to_load)
 
     try:
         # Find the category and query by name
@@ -189,6 +192,10 @@ def run_prebuilt_query():
         # Extract query details
         query_filters = selected_query["original_query"]["filters"]
         return_columns = selected_query["original_query"]["columns"]
+        if "schema" in selected_query["original_query"]:
+            session["schema"] = selected_query["original_query"]
+        else:
+            session["schema"] = ""
 
         # Generate filter objects
         data_registry = get_data_registry()
@@ -201,9 +208,10 @@ def run_prebuilt_query():
         session["query_description"] = selected_query["description"]
         session["filters"] = filters
         session["return_columns"] = return_columns
-        session["schema"] = [
-            "lsst_desc_production"
-        ]  # Default schema for production datasets
+
+        # session["schema"] = [
+        #     "lsst_desc_production"
+        # ]  # Default schema for production datasets
 
         # Additionally store for the query builder if the user wants to modify
         query_tables = []
@@ -312,10 +320,19 @@ def results():
     query_title = session.get("query_title", "Query Results")
     query_description = session.get("query_description", "")
 
+    schema_mode = None
+    if schema.endswith("working"):
+        schema_mode = "working"
+    elif schema.endswith("production"):
+        schema_mode = "production"
+
     try:
         tmp_datareg = get_data_registry()
         df = tmp_datareg.Query.find_datasets(
-            return_columns, filters, return_format="dataframe"
+            property_names=return_columns,
+            filters=filters,
+            return_format="dataframe",
+            schema_mode=schema_mode,
         )
 
         # Generate HTML table
