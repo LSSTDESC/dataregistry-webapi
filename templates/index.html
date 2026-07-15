@@ -36,7 +36,9 @@
         </div>
       </div>
     </div>
-    
+
+    <!-- Take out features which aren't implemented -->
+    <!--
     <div class="col-md-4 mb-4">
       <div class="card shadow-sm hover-card fade-in feature-card">
         <div class="card-body p-4">
@@ -51,7 +53,8 @@
         </div>
       </div>
     </div>
-    
+    -->
+
     <div class="col-md-4 mb-4">
       <div class="card shadow-sm hover-card fade-in feature-card">
         <div class="card-body p-4">
@@ -61,12 +64,12 @@
           <h4 class="card-title">DataRegistry Status</h4>
           <p class="card-text text-muted">Monitor system and dataset updates</p>
           <div class="mt-3">
-            <a href="[Insert DataRegistry Status URL]" class="btn btn-outline-info">Check Status</a>
+            <a href="{{ url_for('registry_stats') }}" class="btn btn-outline-info">Check Status</a>
           </div>
         </div>
       </div>
     </div>
-  </div>
+    </div>
 </section>
 
 <!-- Documentation & Support Section -->
@@ -81,7 +84,9 @@
       </p>
       <ul class="list-unstyled">
         <li><strong>Admin:</strong> Joanne Bogart (<a href="mailto:JoanneBogart">@JoanneBogart</a>)</li>
-        <li><strong>Admin:</strong> Stuart McAlpine (<a href="mailto:stuartmcalpine">@stuartmcalpine</a>)</li>
+	<!--
+            <li><strong>Admin:</strong> Stuart McAlpine (<a href="mailto:stuartmcalpine">@stuartmcalpine</a>)</li>
+	-->
       </ul>
     </div>
   </div>
