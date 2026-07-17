@@ -1,4 +1,4 @@
 flask
 gunicorn
-lsstdesc-dataregistry
+lsstdesc-dataregistry >= 1.7.1
 
